@@ -13,8 +13,11 @@ const router = Router();
 // 
 
 router.get("/", (req, res) => {
-    const ret = pool.query("SELECT COUNT(id) AS 'count' FROM Computer", req.params.id ,function (error, results, fields) {
-        if(error) throw error;
+    const ret = pool.query("SELECT COUNT(id) AS 'count' FROM pc", req.params.id ,function (error, results, fields) {
+        if(error) {
+            res.status(500).json({message: "Internal server error"});
+            console.log(error)
+        }
         console.log(results);
         res.status(200).json(results[0]);
     });
@@ -22,8 +25,11 @@ router.get("/", (req, res) => {
 
 
 router.get("/:id", (req, res) => {
-    const ret = pool.query("SELECT * FROM pc WHERE IDP = ?", req.params.id ,function (error, results, fields) {
-        if(error) throw error;
+    const ret = pool.query("SELECT * FROM pc WHERE id = ?", req.params.id ,function (error, results, fields) {
+        if(error) {
+            res.status(500).json({message: "Internal server error"});
+            console.log(error)
+        }
         console.log(results);
         res.status(200).json(results);
     });
@@ -31,15 +37,19 @@ router.get("/:id", (req, res) => {
 
 
 
-router.put("/", (req, res) => {  
-    const ret = pool.query("UPDATE pc SET status = ? WHERE IDP = ?", [req.body.status, req.body.id], function (error, results, fields) {
-        if(error) throw error;
-        let r =  "update successful"
-        if (results.affectedRows == 0) r = "no update"
-        let response = {
-            "response" : r
+router.put("/", (req, res) => { 
+
+    const ret = pool.query("UPDATE pc SET status = ?, armadio=? WHERE id = ?", [req.body.new_status, req.body.armadio, req.body.id], function (error, results, fields) {
+        if (error) {
+            res.status(500).json({message: "Internal server error"});
+            console.log(error)
         }
-        res.status(200).json(response);
+        if (armadio) {
+            
+        }
+        let r =  "success"
+        if (results.affectedRows == 0) r = "failure"
+        res.status(200).json({message: r});
     });
 })
 
