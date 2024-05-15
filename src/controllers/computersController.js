@@ -12,7 +12,7 @@ const router = Router();
 // });
 // 
 
-router.get("/", (req, res) => {
+router.get("/count", (req, res) => {
     const ret = pool.query("SELECT COUNT(id) AS 'count' FROM pc", req.params.id ,function (error, results, fields) {
         if(error) {
             res.status(500).json({message: "Internal server error"});
@@ -23,6 +23,16 @@ router.get("/", (req, res) => {
     });
 })
 
+router.get("/", (req, res) => {
+    const ret = pool.query("SELECT * FROM pc", req.params.id ,function (error, results, fields) {
+        if(error) {
+            res.status(500).json({message: "Internal server error"});
+            console.log(error)
+        }
+        console.log(results);
+        res.status(200).json(results);
+    });
+})
 
 router.get("/:id", (req, res) => {
     const ret = pool.query("SELECT * FROM pc WHERE id = ?", req.params.id ,function (error, results, fields) {

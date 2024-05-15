@@ -108,6 +108,7 @@ INSERT INTO `pc` (`id`, `nome`, `numero_inventario`, `mac_address_wifi`, `note`,
 (4, 'LENOVO-1', 3113, 'D0-AB-D5-08-C1-C2', 'INTEL CORE I5-7200U 2.50GHZ - 8 GB RAM - WIN 10 PRO. 22H2 -MODELL V130-15IKB - TYPE 81HN - N. SERIE R90V0ZR5', '2023-05-12', NULL, 'disponibile', 1),
 (5, 'HP-4', 3491, '90-E8-68-82-8A-99', 'NUMERO PRODOTTO: HP 250 G8 Notebook PC – NUMERO DI SERIE: CND1377PCR – COD. PRODOTTO: 3V5P1EA#ABZ - 11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz - Windows 10 Pro Education 64 bit  Versione: 19045.2546 – 8 GB RAM – 500 GB H.D.', '2023-06-12', 'senza veyon tutti hp grigio chiari', 'disponibile', 1),
 (6, 'HP-5', 3492, '90-E8-68-82-8A-9D', 'NUMERO PRODOTTO: HP 250 G8 Notebook PC – NUMERO DI SERIE: CND1377P8S – COD. PRODOTTO: 3V5P1EA#ABZ - 11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz - Windows 10 Pro Education 64 bit  Versione: 19045.2546 – 8 GB RAM – 500 GB H.D', '2023-06-12', NULL, 'disponibile', 1),
+
 (7, 'HP-6', 3493, '90-E8-68-82-8A-8F', 'NUMERO PRODOTTO: HP 250 G8 Notebook PC – NUMERO DI SERIE: CND1377P95 – COD. PRODOTTO: 3V5P1EA#ABZ - 11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz - Windows 10 Pro Education 64 bit  Versione: 19045.2546 – 8 GB RAM – 500 GB H.D', '2023-06-12', NULL, 'disponibile', 1),
 (8, 'ASUS-5', 3247, '9C-FC-E8-B0-03-F6', 'INTEL CORE I3 10TH GEN. -', '2023-05-12', NULL, 'disponibile', 1),
 (9, 'HP-8', 3367, '5C-BA-EF-4C-94-8B', 'PC notebook HP 255 G7 - AMD Ryzen 5 3500U with Radeon Vega Mobile Gfx 2.10 GHz – RAM 8 GB – WIN10PRO 22H2 – H.D.250 GB - N. serie: CND0380366 N. prodotto: 3C248EA#ABZ', '2023-07-12', NULL, 'disponibile', 1),
@@ -158,6 +159,7 @@ CREATE TABLE `utenti` (
   `id_login` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+INSERT INTO utenti VALUES (1, 'giuliano', 'bellucci', 'bellux@gmail.com', 'utente', 1);
 --
 -- Indici per le tabelle scaricate
 --
