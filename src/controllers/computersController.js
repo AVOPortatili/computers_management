@@ -63,6 +63,20 @@ router.put("/", (req, res) => {
     });
 })
 
+//serve per ottenere i PC in base all'armadio
+router.get("/armadionum/:armadioId", (req, res) => {
+    pool.query("SELECT * FROM pc WHERE armadio = ?", [req.params.armadioId], function (error, results, fields) {
+        if(error) {
+            res.status(500).json({ message: "Internal server error" });
+            console.log(error);
+        } else {
+            console.log(results);
+            res.status(200).json(results);
+        }
+    });
+});
+
+
 
 
 export default router;
