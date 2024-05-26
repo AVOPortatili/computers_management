@@ -25,7 +25,7 @@ router.get("/count", (req, res) => {
 })
 
 router.get("/", (req, res) => {
-    const ret = pool.query("SELECT pc.*, a.nome AS 'armadio' FROM pc INNER JOIN armadi a on pc.armadio=a.id", req.params.id ,function (error, results, fields) {
+    const ret = pool.query("SELECT pc.*, a.nome AS 'armadio' FROM pc LEFT JOIN armadi a on pc.armadio=a.id", req.params.id ,function (error, results, fields) {
         if(error) {
             res.status(500).json({message: "Internal server error"});
             console.log(error)
