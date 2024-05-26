@@ -1,106 +1,68 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Creato il: Mag 13, 2024 alle 22:48
--- Versione del server: 10.4.28-MariaDB
--- Versione PHP: 8.2.4
-
 drop database if exists pc;
 create database pc;
-use pc
+use pc;
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+CREATE TABLE ruoli (
+  nome varchar(50) not null primary key
+);
 
---
--- Database: `ritiro_pc`
---
+CREATE TABLE utenti (
+  id int not null primary key AUTO_INCREMENT,
+  nome varchar (100),
+  cognome varchar (100) not null,
+  email varchar (255) not null,
+  ruolo varchar (50) not null references ruoli(nome)
+);
 
--- --------------------------------------------------------
+CREATE TABLE login (
+	id int not null primary key AUTO_INCREMENT,
+	username varchar(255) not null,
+	password varchar(255) not null,
+	utente int not null references utenti(id)
+);
 
---
--- Struttura della tabella `armadi`
---
+CREATE TABLE pc (
+  id int NOT NULL primary key AUTO_INCREMENT,
+  nome varchar(50) NOT NULL,
+  numero_inventario int(11) NOT NULL,
+  mac_address_wifi varchar(100) NOT NULL,
+  note varchar(255) DEFAULT NULL,
+  data_ultimo_aggiornamento date DEFAULT NULL,
+  osservazioni varchar(255) DEFAULT NULL,
+  status varchar(50) DEFAULT NULL,
+  armadio int(11) DEFAULT NULL references armadi(id)
+);
 
-CREATE TABLE `armadi` (
-  `id` int(11) NOT NULL,
-  `capienza` int(11) DEFAULT NULL,
-  `aula` int(11) DEFAULT NULL,
-  `nome` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE ritiri (
+  id int not null primary key AUTO_INCREMENT,
+  ora_ritiro time not null,
+  ora_consegna time not null,
+  data date not null,
+  pc int not null references pc(id),
+  insegnante varchar(255) not null  
+);
 
---
--- Dump dei dati per la tabella `armadi`
---
+CREATE TABLE armadi (
+  id int NOT NULL primary key auto_increment,
+  capienza int DEFAULT NULL,
+  aula int DEFAULT NULL references aule(id),
+  nome varchar(20) not null
+);
 
-INSERT INTO `armadi` (`id`, `capienza`, `aula`, `nome`) VALUES
-(1, 30, 1, 'A1');
+CREATE TABLE aule (
+  id int not null primary key AUTO_INCREMENT,
+  nome varchar(255) not null,
+  piano int not null
+);
 
--- --------------------------------------------------------
-
---
--- Struttura della tabella `aule`
---
-
-CREATE TABLE `aule` (
-  `id` int(11) NOT NULL,
-  `nome` varchar(255) NOT NULL,
-  `piano` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dump dei dati per la tabella `aule`
---
-
+insert into ruoli values('utente');
+insert into ruoli values('admin');
+insert into utenti values (1, 'Giuliano', 'Bellucci', 'bellux@gmail.com', 'admin');
+insert into login values (1, 'bellux', '$argon2id$v=19$m=65536,t=3,p=4$k0L1JLW7hm4FGRgaxglE6w$GJx5B9MTwjnC/k0nC0fGbashWLayoeUJNamMtVXGm30', 1);
 INSERT INTO `aule` (`id`, `nome`, `piano`) VALUES
 (1, 'DOCENTIINFO', 2);
-
--- --------------------------------------------------------
-
---
--- Struttura della tabella `login`
---
-
-CREATE TABLE `login` (
-  `id` int(11) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `utente` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dump dei dati per la tabella `login`
---
-
-INSERT INTO `login` (`id`, `username`, `password`, `utente`) VALUES
-(1, 'bellux', '$argon2id$v=19$m=65536,t=3,p=4$k0L1JLW7hm4FGRgaxglE6w$GJx5B9MTwjnC/k0nC0fGbashWLayoeUJNamMtVXGm30', 1);
-
--- --------------------------------------------------------
-
---
--- Struttura della tabella `pc`
---
-
-CREATE TABLE `pc` (
-  `id` int(11) NOT NULL,
-  `nome` varchar(50) NOT NULL,
-  `numero_inventario` int(11) NOT NULL,
-  `mac_address_wifi` varchar(100) NOT NULL,
-  `note` varchar(255) DEFAULT NULL,
-  `data_ultimo_aggiornamento` date DEFAULT NULL,
-  `osservazioni` varchar(255) DEFAULT NULL,
-  `status` varchar(50) DEFAULT NULL,
-  `armadio` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dump dei dati per la tabella `pc`
---
-
+INSERT INTO `armadi` (`id`, `capienza`, `aula`, `nome`) VALUES
+(1, 30, 1, 'A1');
 INSERT INTO `pc` (`id`, `nome`, `numero_inventario`, `mac_address_wifi`, `note`, `data_ultimo_aggiornamento`, `osservazioni`, `status`, `armadio`) VALUES
 (1, 'HP-14', 3370, '5C-BA-EF-4C-7C-31', 'PC notebook HP 255 G7 - AMD Ryzen 5 3500U with Radeon Vega Mobile Gfx 2.10 GHz – RAM 8 GB – WIN10PRO 22H2 – H.D.250 GB - N. serie: CND038030P N. prodotto: 3C248EA#ABZ', '2023-12-12', NULL, 'disponibile', 1),
 (2, 'HP-1', 3241, '70-66-55-6D-E9-85', 'PC notebook HP 255 G7 - AMD Ryzen 3 3200U with Radeon Vega Mobile Gfx 2.60 GHz - RAM 8 GB – WIN10PRO 22H2 – H.D.250 GB - N. serie: CND01624SQ - N. prodotto: 2D318EA', '2023-06-12', NULL, 'disponibile', 1),
@@ -128,153 +90,3 @@ INSERT INTO `pc` (`id`, `nome`, `numero_inventario`, `mac_address_wifi`, `note`,
 (23, 'ASUS-6', 3248, '9C-FC-E8-AF-98-8F', 'INTEL CORE I3-1005G1 - 1,20 GHZ - 8 GB RAM - H.D. 250 GB', '2023-05-12', NULL, 'disponibile', 1),
 (24, 'ASUS-2', 3244, '9C-FC-E8-AF-80-48', 'INTEL CORE I3-1005G1 - 1,20 GHZ - 8 GB RAM - H.D. 250 GB', '2023-06-12', NULL, 'disponibile', 1),
 (25, 'ASUS-1', 3243, '9C-FC-E8-AF-A7-DF', 'INTEL CORE I3-1005G1 - 1,20 GHZ - 8 GB RAM - H.D. 250 GB', '2023-05-12', NULL, 'disponibile', 1);
-
--- --------------------------------------------------------
-
---
--- Struttura della tabella `ritiri`
---
-
-CREATE TABLE `ritiri` (
-  `id` int(11) NOT NULL,
-  `ora_ritiro` time NOT NULL,
-  `ora_consegna` time NOT NULL,
-  `data` date NOT NULL,
-  `pc` int(11) NOT NULL,
-  `insegnante` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Struttura della tabella `utenti`
---
-
-CREATE TABLE `utenti` (
-  `id` int(11) NOT NULL,
-  `nome` varchar(100) DEFAULT NULL,
-  `cognome` varchar(100) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `ruolo` varchar(50) NOT NULL,
-  `id_login` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-INSERT INTO utenti VALUES (1, 'giuliano', 'bellucci', 'bellux@gmail.com', 'utente', 1);
---
--- Indici per le tabelle scaricate
---
-
---
--- Indici per le tabelle `armadi`
---
-ALTER TABLE `armadi`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `aula` (`aula`);
-
---
--- Indici per le tabelle `aule`
---
-ALTER TABLE `aule`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indici per le tabelle `login`
---
-ALTER TABLE `login`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indici per le tabelle `pc`
---
-ALTER TABLE `pc`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `armadio` (`armadio`);
-
---
--- Indici per le tabelle `ritiri`
---
-ALTER TABLE `ritiri`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `insegnante` (`insegnante`),
-  ADD KEY `pc` (`pc`);
-
---
--- Indici per le tabelle `utenti`
---
-ALTER TABLE `utenti`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_login` (`id_login`);
-
---
--- AUTO_INCREMENT per le tabelle scaricate
---
-
---
--- AUTO_INCREMENT per la tabella `armadi`
---
-ALTER TABLE `armadi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT per la tabella `aule`
---
-ALTER TABLE `aule`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT per la tabella `login`
---
-ALTER TABLE `login`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT per la tabella `pc`
---
-ALTER TABLE `pc`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
-
---
--- AUTO_INCREMENT per la tabella `ritiri`
---
-ALTER TABLE `ritiri`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT per la tabella `utenti`
---
-ALTER TABLE `utenti`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- Limiti per le tabelle scaricate
---
-
---
--- Limiti per la tabella `armadi`
---
-ALTER TABLE `armadi`
-  ADD CONSTRAINT `armadi_ibfk_1` FOREIGN KEY (`aula`) REFERENCES `aule` (`id`);
-
---
--- Limiti per la tabella `pc`
---
-ALTER TABLE `pc`
-  ADD CONSTRAINT `pc_ibfk_1` FOREIGN KEY (`armadio`) REFERENCES `armadi` (`id`);
-
---
--- Limiti per la tabella `ritiri`
---
-ALTER TABLE `ritiri`
-  ADD CONSTRAINT `ritiri_ibfk_1` FOREIGN KEY (`insegnante`) REFERENCES `utenti` (`id`),
-  ADD CONSTRAINT `ritiri_ibfk_2` FOREIGN KEY (`pc`) REFERENCES `pc` (`id`);
-
---
--- Limiti per la tabella `utenti`
---
-ALTER TABLE `utenti`
-  ADD CONSTRAINT `utenti_ibfk_1` FOREIGN KEY (`id_login`) REFERENCES `login` (`id`);
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
