@@ -47,20 +47,17 @@ router.get("/:id", (req, res) => {
 
 
 
-router.put("/", (req, res) => { 
-
-    const ret = pool.query("UPDATE pc SET status = ?, armadio=? WHERE id = ?", [req.body.new_status, req.body.armadio, req.body.id], function (error, results, fields) {
+router.put("/", (req, res) => {
+    console.log(req.body) 
+    const ret = pool.query("UPDATE pc SET status = ?, armadio=? WHERE id = ?", [req.body.new_status, req.body.armadio, req.body.id], (error, results, fields) => {
         if (error) {
             res.status(500).json({message: "Internal server error"});
             console.log(error)
         }
-        if (armadio) {
-            
-        }
         let r =  "success"
         if (results.affectedRows == 0) r = "failure"
         res.status(200).json({message: r});
-    });
+    }) 
 })
 
 //serve per ottenere i PC in base all'armadio
@@ -75,8 +72,5 @@ router.get("/armadionum/:armadioId", (req, res) => {
         }
     });
 });
-
-
-
 
 export default router;

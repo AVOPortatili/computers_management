@@ -4,7 +4,7 @@ import { pool } from '../mysqlConnector.js'
 const router = Router();
 
 
-router.get("/all", (req, res) => {
+router.get("/", (req, res) => {
     const ret = pool.query("SELECT armadi.id,armadi.nome,armadi.capienza, aule.nome as aula FROM armadi INNER JOIN aule ON armadi.aula = aule.id", req.params.id ,function (error, results, fields) {
         if(error) {
             res.status(500).json({message: "Internal server error"});
@@ -16,8 +16,8 @@ router.get("/all", (req, res) => {
 })
 
 
-router.get("/", (req, res) => {
-    const ret = pool.query("SELECT armadi.id, armadi.nome, aule.nome as aula, COUNT(pc.id) as count FROM armadi INNER JOIN pc ON pc.armadio = armadi.id INNER JOIN aule ON aule.id=armadi.aula", req.params.id ,function (error, results, fields) {
+router.get("/count", (req, res) => {
+    const ret = pool.query("SELECT armadi.id, armadi.nome, aule.nome as aula, COUNT(pc.id) as count FROM armadi INNER JOIN pc ON pc.armadio = armadi.id INNER JOIN aule ON aule.id=armadi.aula WHERE pc.status=\"disponibile\"", req.params.id ,function (error, results, fields) {
         if(error) {
             res.status(500).json({message: "Internal server error"});
             console.log(error)
