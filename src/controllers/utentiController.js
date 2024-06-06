@@ -36,7 +36,7 @@ router.delete("/", (req, res) => {
 
 router.post("/", async (req, res) => { //questo tanto e' solo un placeholder
     console.log(req.body)
-    const ret = pool.query("INSERT INTO utenti (nome, cognome, email, ruolo) VALUES(?, ?, ?, ?)", [req.body.nome, req.body.cognome, req.body.email, req.body.ruolo],function (error, results, fields) {
+    const ret = await pool.query("INSERT INTO utenti (nome, cognome, email, ruolo) VALUES(?, ?, ?, ?)", [req.body.nome, req.body.cognome, req.body.email, req.body.ruolo],function (error, results, fields) {
         if (error) {
             res.status(500).json({message: "Internal server error"});
             console.log(error)
