@@ -39,4 +39,45 @@ router.get("/:id", (req, res) => {
     });
 });
 
+
+router.put("/", (req, res) => {
+    console.log(req.body) 
+    const ret = pool.query("UPDATE armadi SET nome = ?, aula =?, capienza = ? WHERE id = ?", [req.body.nome, req.body.aula, req.body.capienza, req.body.id], (error, results, fields) => {
+        if (error) {
+            res.status(500).json({message: "Internal server error"});
+            console.log(error)
+        } else {
+            let r =  "success"
+            if (results.affectedRows == 0) r = "failure"
+            res.status(200).json({message: r});
+        }
+    }) 
+})
+
+router.post("/", (req, res) => {
+    console.log(req.body) 
+    const ret = pool.query("INSERT INTO armadi (capienza, aula, nome) VALUES (?, ?, ?) ", 
+    [req.body.nome, req.body.aula, req.body.nome], 
+    (error, results, fields) => {
+        if (error) {
+            res.status(500).json({message: "Internal server error"});
+            console.log(error)
+        } else {
+            let r =  "success"
+            res.status(200).json({message: r});
+        }
+    }) 
+})
+
+router.delete("/", (req, res) => {
+    const ret = pool.query("DELETE FROM armadi where id=?", req.body.id ,function (error, results, fields) {
+        if (error) {
+            res.status(500).json({message: "Internal server error"});
+            console.log(error)
+        }
+        let r =  "success"
+        if (results.affectedRows == 0) r = "failure"
+        res.status(200).json({message: r});
+    });
+})
 export default router;
